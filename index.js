@@ -3,7 +3,7 @@ var dotenv = require("dotenv");
 dotenv.config();
 var app = express();
 const cors = require("cors");
-
+const jwt = require("jsonwebtoken");
 app.use(cors());
 app.use(express.json()); // gives ability to the server to parse json requests
 var PORT = process.env.PORT;
@@ -231,34 +231,56 @@ app.post("/getproductlist", function (req, res) {
   ]);
 });
 
-var credentials = {
-  username: "test",
-  password: "test",
-};
+const data = require("./database");
+
 app.post("/login", (req, res) => {
-  console.log(req.body);
+  //   console.log(req.body);
   const { username, password } = req.body;
   // const username = req.body.username;
   // const password = req.body.password;
 
-  // test
-  //test
-
-  if (credentials) {
-    if (username == credentials.username) {
-      if (password == credentials.password) {
-        res.status(200).send({ msg: "Login successfull" });
-      } else {
-        res.status(403).send({ msg: "Username or password is incorrect" });
-      }
+  if (username == data.user.username) {
+    if (password == data.user.password) {
+      const userDetails = data.userData;
+      const token = jwt.sign(userDetails, "mysecretkey");
+      console.log(token);
+      res.status(200).send({ token: token });
     } else {
-      res.status(401).send({ msg: "User is not registered" });
+      res.status(403).send({ msg: "Username or password is incorrect" });
     }
   } else {
-    res.status(500).send({ msg: "internal server error" });
+    res.status(401).send({ msg: "User is not registered" });
   }
 });
 //200 OK
 //401 Unauthorised
 //403 Forbidden
 //500 Internal server error
+
+//create an api that checks if a user is logged in or not
+
+// your req will contain some token
+//match that token with some token in your backend
+//if matched then send response 200 as logged in
+//else send response 403 unauthorised
+
+//After the user logs in
+//whenever you are making a server call from frontend, the token should be sent along the
+//request to make sure or to validate that the request is coming from a known source
+//how it is validated? by decoding this token against the secret key in your backend
+//if token decoded successfully it means valid request
+//else invalid request
+
+app.post("/addproduct", (req, res) => {
+  try {
+    const isValid = jwt.verify(req.body.token, "mysecretkey");
+    if (isValid) {
+      console.log(isValid);
+      res.status(200).send({ msg: "data added successfully" });
+    }
+  } catch (e) {
+    console.log(e);
+    console.log("invalid request");
+    res.status(500).send({ msg: "unauthorised" });
+  }
+});
