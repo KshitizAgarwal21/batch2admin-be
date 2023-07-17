@@ -1,0 +1,15 @@
+
+
+assignment 
+
+
+backend
+Create an api that creates a token from userData(username, phone, city, role, company)
+send this token to frontend
+display this data in frontend
+
+
+frontend
+login page
+user profile page -> display data receieved in token
+edit prfile -> call the api created in above server using the token received to make changes to the user object in backend

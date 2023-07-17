@@ -272,8 +272,10 @@ app.post("/login", (req, res) => {
 //else invalid request
 
 app.post("/addproduct", (req, res) => {
+  // console.log(req.body);
+  console.log(req.headers.authorization);
   try {
-    const isValid = jwt.verify(req.body.token, "mysecretkey");
+    const isValid = jwt.verify(req.headers.authorization, "mysecretkey");
     if (isValid) {
       console.log(isValid);
       res.status(200).send({ msg: "data added successfully" });
@@ -284,3 +286,7 @@ app.post("/addproduct", (req, res) => {
     res.status(500).send({ msg: "unauthorised" });
   }
 });
+
+//whenever you are sending sensitive info such as jwt tokens from your frontend
+//it is advisable to send it by attaching it to the header instead of body as it cannot
+//be intercepted in between
