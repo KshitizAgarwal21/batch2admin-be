@@ -7,7 +7,8 @@ const jwt = require("jsonwebtoken");
 app.use(cors());
 app.use(express.json()); // gives ability to the server to parse json requests
 var PORT = process.env.PORT;
-
+const RouteGuard = require("./Middleware/RouteGuard");
+const Validator = require("./Middleware/Validator");
 app.listen(PORT, (err) => {
   if (err) {
     console.log(err);
@@ -233,12 +234,12 @@ app.post("/getproductlist", function (req, res) {
 
 const data = require("./database");
 
-app.post("/login", (req, res) => {
+app.post("/login", Validator, (req, res) => {
   //   console.log(req.body);
-  const { username, password } = req.body;
+
   // const username = req.body.username;
   // const password = req.body.password;
-
+  const { username, password } = req.body;
   if (username == data.user.username) {
     if (password == data.user.password) {
       const userDetails = data.userData;
@@ -271,21 +272,17 @@ app.post("/login", (req, res) => {
 //if token decoded successfully it means valid request
 //else invalid request
 
-app.post("/addproduct", (req, res) => {
+//Middlewares -> simple function that sit in between the request and response of
+//your api call.
+
+app.post("/addproduct", RouteGuard, (req, res) => {
   // console.log(req.body);
-  console.log(req.headers.authorization);
-  try {
-    const isValid = jwt.verify(req.headers.authorization, "mysecretkey");
-    if (isValid) {
-      console.log(isValid);
-      res.status(200).send({ msg: "data added successfully" });
-    }
-  } catch (e) {
-    console.log(e);
-    console.log("invalid request");
-    res.status(500).send({ msg: "unauthorised" });
-  }
+  // console.log(req.headers.authorization);
+  console.log("route guard activated and returned");
+  res.status(200).send({ msg: "data added successfully" });
 });
+
+app.post("/editproduct", RouteGuard, (req, res) => {});
 
 //whenever you are sending sensitive info such as jwt tokens from your frontend
 //it is advisable to send it by attaching it to the header instead of body as it cannot

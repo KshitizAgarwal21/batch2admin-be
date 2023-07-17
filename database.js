@@ -1,5 +1,5 @@
 exports.user = {
-  username: "Kagarwal",
+  username: "Kagarwal@gmail.com",
   password: "1234567890",
 };
 
