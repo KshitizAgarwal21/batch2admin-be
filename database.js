@@ -1,11 +1,1 @@
-exports.user = {
-  username: "Kagarwal@gmail.com",
-  password: "1234567890",
-};
-
-exports.userData = {
-  firstName: "Kshitiz",
-  lastName: "Agarwal",
-  city: "Gurgaon",
-  contact: "1234567809",
-};
+user = {"username":"test","password":"1234567890"}; userData = {"firstName":"Kshitiz","lastName":"Agarwal","city":"Gurgaon","contact":"1234567809"}; module.exports = { user, userData };

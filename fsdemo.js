@@ -1,25 +1,30 @@
+const { json } = require("express");
 var express = require("express");
 var app = express();
 var fs = require("fs");
 var PORT = process.env.PORT;
+const { user } = require("./database");
+const { userData } = require("./database");
+function updateData() {
+  console.log(user);
 
-app.listen(PORT, (err) => {
-  if (err) {
-    console.log(err);
-  }
-  console.log("Server  started successfully at port " + PORT);
-});
+  user.username = "test";
+  console.log(JSON.stringify(user));
+  const finalString =
+    "user = " +
+    JSON.stringify(user) +
+    ";" +
+    " " +
+    "userData = " +
+    JSON.stringify(userData) +
+    ";" +
+    " " +
+    "module.exports = { user, userData };";
 
-fs.readFile("./hello.txt", "utf-8", (err, data) => {
-  if (err) {
-    console.log(err);
-  } else console.log(data.toString().length);
-});
+  console.log(finalString);
 
-fs.appendFile("./hello.txt", " new data to be added", (err) => {
-  if (err) console.log(err);
-  console.log("data added successfully");
-});
-fs.writeFile("./hello.txt", "new data", (err) => {
-  console.log("data added successfully");
-});
+  fs.writeFile("./database.js", finalString, (err) => {
+    if (err) console.log(err);
+    else console.log("updated");
+  });
+}
