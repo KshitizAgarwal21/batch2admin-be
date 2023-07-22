@@ -41,8 +41,8 @@ router.post("/forgotpassword", async (req, res) => {
     from: "kshitizagarwal27@gmail.com", // sender address
     to: "kshitizagarwal27@gmail.com", // list of receivers
     subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>", // html body
+    // text: "Hello world?", // plain text body
+    html: "<h1>Hello world?</h1>", // html body
   });
 });
 module.exports = router;
