@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const data = require("../database");
 const jwt = require("jsonwebtoken");
+
+const nodemailer = require("nodemailer");
 router.post("/loginapi", (req, res) => {
   //   console.log(req.body);
 
@@ -26,5 +28,20 @@ router.post("/loginapi", (req, res) => {
 // //403 Forbidden
 // //500 Internal server error
 
-router.post("/forgotpassword", (req, res) => {});
+const smtpTransport = nodemailer.createTransport("SMTP", {
+  service: "Gmail",
+  auth: {
+    user: "myemail ",
+    pass: "mypass",
+  },
+});
+router.post("/forgotpassword", async (req, res) => {
+  const info = await transporter.sendMail({
+    from: "kshitizagarwal27@gmail.com", // sender address
+    to: "kshitizagarwal27@gmail.com", // list of receivers
+    subject: "Hello ✔", // Subject line
+    text: "Hello world?", // plain text body
+    html: "<b>Hello world?</b>", // html body
+  });
+});
 module.exports = router;
