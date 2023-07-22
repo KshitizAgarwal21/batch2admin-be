@@ -10,12 +10,24 @@ var PORT = process.env.PORT;
 const RouteGuard = require("./Middleware/RouteGuard");
 const Validator = require("./Middleware/Validator");
 const api = require("./api");
+const dbUrl = "mongodb+srv://Test:Test123@cluster0.nluje5t.mongodb.net/";
+const mongoose = require("mongoose");
+
 app.listen(PORT, (err) => {
   if (err) {
     console.log(err);
   }
   console.log("Server  started successfully at port " + PORT);
 });
+mongoose.set("strictQuery", true);
+mongoose
+  .connect(dbUrl)
+  .then(() => {
+    console.log("connected to db");
+  })
+  .catch((e) => {
+    console.log("some error occured");
+  });
 
 app.use("/", api);
 

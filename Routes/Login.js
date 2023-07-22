@@ -36,13 +36,17 @@ const transporter = nodemailer.createTransport({
     pass: "",
   },
 });
+
+const mailHtml =
+  "<h1>Welcome to Letsupgrade</h1><ul><li>full stack</li><li>Data science</li></ul><img src='https://w7.pngwing.com/pngs/452/24/png-transparent-js-logo-node-logos-and-brands-icon.png' />";
+
 router.post("/forgotpassword", async (req, res) => {
   const info = await transporter.sendMail({
     from: "kshitizagarwal27@gmail.com", // sender address
     to: "kshitizagarwal27@gmail.com", // list of receivers
     subject: "Hello ✔", // Subject line
-    // text: "Hello world?", // plain text body
-    html: "<h1>Hello world?</h1>", // html body
+    text: "Hello world?", // plain text body
+    html: mailHtml, // html body
   });
 });
 module.exports = router;
