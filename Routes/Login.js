@@ -28,11 +28,12 @@ router.post("/loginapi", (req, res) => {
 // //403 Forbidden
 // //500 Internal server error
 
-const smtpTransport = nodemailer.createTransport("SMTP", {
+const transporter = nodemailer.createTransport({
   service: "Gmail",
+  host: "smtp.gmail.com",
   auth: {
-    user: "myemail ",
-    pass: "mypass",
+    user: "kshitizagarwal27@gmail.com ",
+    pass: "",
   },
 });
 router.post("/forgotpassword", async (req, res) => {
