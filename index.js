@@ -10,7 +10,8 @@ var PORT = process.env.PORT;
 const RouteGuard = require("./Middleware/RouteGuard");
 const Validator = require("./Middleware/Validator");
 const api = require("./api");
-const dbUrl = "mongodb+srv://Test:Test123@cluster0.nluje5t.mongodb.net/";
+const dbUrl =
+  "mongodb+srv://Test:Test123@cluster0.nluje5t.mongodb.net/AdminDashboardDB";
 const mongoose = require("mongoose");
 
 app.listen(PORT, (err) => {

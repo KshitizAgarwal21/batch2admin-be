@@ -2,8 +2,39 @@ const express = require("express");
 const router = express.Router();
 const data = require("../database");
 const jwt = require("jsonwebtoken");
-
+const Users = require("../Schema/UserSchema");
 const nodemailer = require("nodemailer");
+//Create operation to create a new user with first name, last name, age and course
+router.post("/signup", async (req, res) => {
+  const newUser = {
+    Username: req.body.Username,
+    Password: req.body.Password,
+  };
+
+  const user = new Users(newUser);
+
+  const userAdded = await user.save();
+
+  if (userAdded) {
+    console.log(userAdded);
+    console.log("New user added successfully");
+  }
+});
+//Read operation
+router.post("/getusers", async (req, res) => {
+  const users = await Users.find({});
+
+  if (users) {
+    console.log(users);
+  }
+
+  const user = await Users.findOne({ Username: req.body.username });
+
+  if (user) {
+    console.log("single user " + user);
+  }
+});
+
 router.post("/loginapi", (req, res) => {
   //   console.log(req.body);
 
