@@ -20,4 +20,9 @@ const schema = new mongoose.Schema({
 //create a model from the schema on which mongoose can operate
 const Users = mongoose.model("User", schema);
 
+//Users is an object of type schema
+//Users = {
+// "Username":value,
+//"Password":value
+//}
 module.exports = Users;

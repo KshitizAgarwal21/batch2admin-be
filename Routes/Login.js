@@ -21,31 +21,35 @@ router.post("/signup", async (req, res) => {
   }
 });
 //Read operation
-router.post("/getusers", async (req, res) => {
-  const users = await Users.find({});
+// router.post("/getusers", async (req, res) => {
+//   const users = await Users.find({});
 
-  if (users) {
-    console.log(users);
-  }
+//   if (users) {
+//     console.log(users);
+//   }
 
-  const user = await Users.findOne({ Username: req.body.username });
+//   const user = await Users.findOne({ Username: req.body.username });
 
-  if (user) {
-    console.log("single user " + user);
-  }
-});
+//   if (user) {
+//     console.log("single user " + user);
+//   }
+// });
 
-router.post("/loginapi", (req, res) => {
+router.post("/loginapi", async (req, res) => {
   //   console.log(req.body);
 
   // const username = req.body.username;
   // const password = req.body.password;
   const { username, password } = req.body;
-  if (username == data.user.username) {
-    if (password == data.user.password) {
+
+  //req.body.usrername = "test1user"
+
+  const userExist = await Users.findOne({ Username: username });
+
+  if (userExist) {
+    if (userExist.Password === password) {
       const userDetails = data.userData;
       const token = jwt.sign(userDetails, "mysecretkey");
-      console.log(token);
       res.status(200).send({ token: token });
     } else {
       res.status(403).send({ msg: "Username or password is incorrect" });
@@ -53,6 +57,19 @@ router.post("/loginapi", (req, res) => {
   } else {
     res.status(401).send({ msg: "User is not registered" });
   }
+
+  // if (username == data.user.username) {
+  //   if (password == data.user.password) {
+  //     const userDetails = data.userData;
+  //     const token = jwt.sign(userDetails, "mysecretkey");
+  //     console.log(token);
+  //     res.status(200).send({ token: token });
+  //   } else {
+  //     res.status(403).send({ msg: "Username or password is incorrect" });
+  //   }
+  // } else {
+  //   res.status(401).send({ msg: "User is not registered" });
+  // }
 });
 // //200 OK
 // //401 Unauthorised
