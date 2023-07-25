@@ -1,23 +1,23 @@
 const mongoose = require("mongoose");
 
 const Products = new mongoose.Schema({
-    id: {
-    type: Integer,
-    required: true,
-  },
-  title: {
-    type: String,
-    required: true,
-  },
-  price: {
+  id: {
     type: Number,
     required: true,
   },
-  description: {
+  Name: {
     type: String,
     required: true,
   },
-  category: {
+  Price: {
+    type: Number,
+    required: true,
+  },
+  Description: {
+    type: String,
+    required: true,
+  },
+  Category: {
     type: String,
     required: true,
   },
@@ -25,17 +25,25 @@ const Products = new mongoose.Schema({
     type: String,
     required: true,
   },
-  rating: {
-    rate: {
-        type: Number,
-        required: true,
-      },
-      count: {
-        type: Number,
-        required: true,
-      },
-  }
+  Properties: {
+    Weight: {
+      type: Number,
+      required: true,
+    },
+    Sizes: {
+      type: Number,
+      required: true,
+    },
+  },
+  Tags: {
+    type: String,
+    required: true,
+  },
+  SKU: {
+    type: String,
+    required: true,
+  },
 });
 
-const ProductDetails = mongoose.model('ProductDetail', Products);
+const ProductDetails = mongoose.model("ProductDetail", Products);
 module.exports = ProductDetails;

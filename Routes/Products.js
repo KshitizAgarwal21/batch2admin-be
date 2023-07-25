@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const maxSize = 1048576; //maximum 10mb file is supported
-
+const ProductDetail = require("../Schema/Productschema");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads");
@@ -259,13 +259,48 @@ router.post("/addproductmedia", (req, res) => {
       }
     } else {
       console.log("file uploaded successfully");
-      res.status(200).send({ msg: "upload successfull" });
+      console.log(req.file);
+      res.status(200).send({ msg: "upload successfull", path: req.file.path });
     }
   });
 });
 
-router.post("/addproductdata", (req, res) => {
-  console.log(req.body);
-  res.status(200).send({ msg: "data added successfully" });
+router.post("/addproductdata", async (req, res) => {
+  const {
+    name,
+    weight,
+    size,
+    category,
+    description,
+    price,
+    tags,
+    sku,
+    imageUrl,
+  } = req.body;
+
+  // const id = Math.random() * 100;
+  const product = {
+    id: 1,
+    Name: name,
+    Price: price,
+    Description: description,
+    Category: category,
+    Tags: tags,
+    SKU: sku,
+    Properties: {
+      Weight: weight,
+      Sizes: size,
+    },
+    image: imageUrl,
+  };
+
+  const newProduct = new ProductDetail(product);
+
+  const productAdded = await newProduct.save();
+
+  if (productAdded) {
+    console.log("new product added successfully");
+  }
 });
+
 module.exports = router;
