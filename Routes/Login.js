@@ -48,7 +48,7 @@ router.post("/loginapi", async (req, res) => {
 
   if (userExist) {
     if (userExist.Password === password) {
-      const userDetails = data.userData;
+      const userDetails = { uid: userExist._id };
       const token = jwt.sign(userDetails, "mysecretkey");
       res.status(200).send({ token: token });
     } else {
