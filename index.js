@@ -27,7 +27,7 @@ mongoose
     console.log("connected to db");
   })
   .catch((e) => {
-    console.log("some error occured");
+    console.log("some error occured " + e);
   });
 
 app.use("/", api);

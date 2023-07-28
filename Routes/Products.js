@@ -6,7 +6,7 @@ const ProductDetail = require("../Schema/Productschema");
 const jwt = require("jsonwebtoken");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads");
+    cb(null, "../public/uploads");
   },
   filename: function (req, file, cb) {
     const ext = file.mimetype.split("/")[1];
@@ -62,7 +62,9 @@ router.post("/addproductmedia", (req, res) => {
     } else {
       console.log("file uploaded successfully");
       console.log(req.file);
-      res.status(200).send({ msg: "upload successfull", path: req.file.path });
+      res
+        .status(200)
+        .send({ msg: "upload successfull", path: req.file.path.substring(9) });
     }
   });
 });
@@ -85,7 +87,7 @@ router.post("/addproductdata", async (req, res) => {
   // const id = Math.random() * 100;
   const product = {
     userid: decodeToken.uid,
-    id: 2,
+    id: Math.random() * 1000,
     Name: name,
     Price: price,
     Description: description,
@@ -105,6 +107,29 @@ router.post("/addproductdata", async (req, res) => {
 
   if (productAdded) {
     console.log("new product added successfully");
+  }
+});
+
+router.post("/editproductdata", async (req, res) => {
+  const { id, Category, Description, Name, Price, SKU, Sizes, Tags, Weight } =
+    req.body;
+
+  const findAndUpdateItem = await ProductDetail.findOneAndUpdate(
+    { id: id },
+    {
+      Category: Category,
+      Description: Description,
+      Name: Name,
+      Price: Price,
+      "Properties.Sizes": Sizes,
+      "Properties.Weight": Weight,
+      Tags: Tags,
+    }
+  );
+
+  if (findAndUpdateItem) {
+    console.log(findAndUpdateItem);
+    console.log("updated data");
   }
 });
 
