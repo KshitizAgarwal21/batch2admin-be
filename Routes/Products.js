@@ -87,7 +87,7 @@ router.post("/addproductdata", async (req, res) => {
   // const id = Math.random() * 100;
   const product = {
     userid: decodeToken.uid,
-    id: Math.random() * 1000,
+    id: Math.ceil(Math.random() * 1000),
     Name: name,
     Price: price,
     Description: description,
@@ -107,10 +107,11 @@ router.post("/addproductdata", async (req, res) => {
 
   if (productAdded) {
     console.log("new product added successfully");
+    res.status(200).send({ msg: "Product added successfully" });
   }
 });
 
-router.post("/editproductdata", async (req, res) => {
+router.put("/editproductdata", async (req, res) => {
   const { id, Category, Description, Name, Price, SKU, Sizes, Tags, Weight } =
     req.body;
 
@@ -130,6 +131,24 @@ router.post("/editproductdata", async (req, res) => {
   if (findAndUpdateItem) {
     console.log(findAndUpdateItem);
     console.log("updated data");
+  }
+});
+
+router.delete("/deleteproductdata", async (req, res) => {
+  const decodeToken = jwt.verify(req.headers.authorization, "mysecretkey");
+
+  const uid = decodeToken.uid;
+
+  const { id, Category, Description, Name, Price, SKU, Sizes, Tags, Weight } =
+    req.body;
+  console.log(req.body);
+  const isDeleted = await ProductDetail.deleteOne({ userid: uid, id: id });
+
+  if (isDeleted.deletedCount) {
+    console.log(isDeleted);
+    res.status(200).send({ msg: "data deleted " });
+  } else {
+    res.status(401).send({ msg: "issue occured" });
   }
 });
 
