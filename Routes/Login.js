@@ -4,11 +4,15 @@ const data = require("../database");
 const jwt = require("jsonwebtoken");
 const Users = require("../Schema/UserSchema");
 const nodemailer = require("nodemailer");
+var bcrypt = require("bcryptjs");
+
 //Create operation to create a new user with first name, last name, age and course
 router.post("/signup", async (req, res) => {
+  var salt = bcrypt.genSaltSync(10);
+  var hash = bcrypt.hashSync(req.body.Password, salt);
   const newUser = {
     Username: req.body.Username,
-    Password: req.body.Password,
+    Password: hash,
   };
 
   const user = new Users(newUser);
@@ -47,7 +51,8 @@ router.post("/loginapi", async (req, res) => {
   const userExist = await Users.findOne({ Username: username });
 
   if (userExist) {
-    if (userExist.Password === password) {
+    const passMatched = bcrypt.compareSync(password, userExist.Password);
+    if (passMatched) {
       const userDetails = { uid: userExist._id };
       const token = jwt.sign(userDetails, "mysecretkey");
       res.status(200).send({ token: token });

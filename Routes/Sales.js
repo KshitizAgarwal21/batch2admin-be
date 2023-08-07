@@ -21,7 +21,7 @@ router.post("/chart2Data", async (req, res) => {
     userid: decodeToken.uid,
     category: req.body.category,
   });
-  console.log(data);
+
   if (data) {
     res.status(200).send(data);
   }
